@@ -1,7 +1,7 @@
-import 'package:marcelo/bloc/login.dart';
-import 'package:marcelo/bloc/usuario.dart';
-import 'package:marcelo/config/theme.dart';
-import 'package:marcelo/view/splash.dart';
+import 'package:inoveMilk/bloc/login.dart';
+import 'package:inoveMilk/bloc/usuario.dart';
+import 'package:inoveMilk/config/theme.dart';
+import 'package:inoveMilk/view/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 

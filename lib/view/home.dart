@@ -1,5 +1,5 @@
-import 'package:marcelo/widget/menu_lateral.dart';
-import 'package:marcelo/widget/my_app_bar.dart';
+import 'package:inoveMilk/widget/menu_lateral.dart';
+import 'package:inoveMilk/widget/my_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 // import 'package:rypr/widget/myAppBar.dart';

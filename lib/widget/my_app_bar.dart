@@ -32,7 +32,6 @@ PreferredSizeWidget myAppBar(BuildContext context,
                         ),
                   Text(
                     title != null ? title : "",
-                    style: Theme.of(context).textTheme.title,
                   ),
                 ],
               ),

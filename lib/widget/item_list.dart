@@ -1,5 +1,5 @@
-import 'package:marcelo/modelos/usuario.dart';
-import 'package:marcelo/view/home.dart';
+import 'package:inoveMilk/modelos/usuario.dart';
+import 'package:inoveMilk/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

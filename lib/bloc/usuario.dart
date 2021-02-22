@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:marcelo/modelos/usuario.dart';
+import 'package:inoveMilk/modelos/usuario.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

@@ -1,5 +1,5 @@
-import 'package:marcelo/bloc/login.dart';
-import 'package:marcelo/view/home.dart';
+import 'package:inoveMilk/bloc/login.dart';
+import 'package:inoveMilk/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
@@ -20,17 +20,14 @@ class MenuLateral extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text("Usuário"),
+            title: Text("Lançar coleta"),
             leading: Icon(Icons.person_add),
             onTap: () {},
           ),
           ListTile(
-            title: Text("Vendas"),
-            leading: Icon(Icons.people),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()));
-            },
+            title: Text("Check-in laticínio"),
+            leading: Icon(Icons.person_add),
+            onTap: () {},
           ),
           ListTile(
             title: Text("Logout"),

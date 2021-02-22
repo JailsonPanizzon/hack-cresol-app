@@ -1,6 +1,6 @@
-import 'package:marcelo/view/home.dart';
-import 'package:marcelo/view/login.dart';
-import 'package:marcelo/view/register.dart';
+import 'package:inoveMilk/view/home.dart';
+import 'package:inoveMilk/view/login.dart';
+import 'package:inoveMilk/view/register.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

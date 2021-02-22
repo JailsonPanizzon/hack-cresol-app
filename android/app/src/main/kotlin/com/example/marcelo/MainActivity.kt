@@ -1,4 +1,4 @@
-package com.example.marcelo
+package com.example.inoveMilk
 
 import io.flutter.embedding.android.FlutterActivity
 
