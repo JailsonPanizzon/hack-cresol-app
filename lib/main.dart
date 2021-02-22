@@ -1,3 +1,5 @@
+import 'package:inoveMilk/bloc/buscar_produtor.dart';
+import 'package:inoveMilk/bloc/lancar_coleta.dart';
 import 'package:inoveMilk/bloc/login.dart';
 import 'package:inoveMilk/bloc/usuario.dart';
 import 'package:inoveMilk/config/theme.dart';
@@ -15,9 +17,11 @@ class MyApp extends StatelessWidget {
       blocs: [
         Bloc((i) => LoginBloc()),
         Bloc((i) => UsuariosBloc()),
+        Bloc((i) => LancarColetaBloc()),
+        Bloc((i) => BuscarProdutorBloc()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'inoveMilk',
         theme: themeData,
         home: MySplashScreen(),
       ),

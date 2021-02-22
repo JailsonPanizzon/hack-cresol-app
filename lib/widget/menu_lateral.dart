@@ -1,8 +1,8 @@
 import 'package:inoveMilk/bloc/login.dart';
-import 'package:inoveMilk/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:inoveMilk/view/buscar_produtor.dart';
 
 class MenuLateral extends StatelessWidget {
   static LoginBloc bloc = BlocProvider.getBloc<LoginBloc>();
@@ -22,7 +22,10 @@ class MenuLateral extends StatelessWidget {
           ListTile(
             title: Text("Lançar coleta"),
             leading: Icon(Icons.person_add),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BuscarProdutor()));
+            },
           ),
           ListTile(
             title: Text("Check-in laticínio"),
