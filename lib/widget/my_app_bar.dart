@@ -5,7 +5,8 @@ PreferredSizeWidget myAppBar(BuildContext context,
     {String title,
     Color bgColor,
     bool disableBack = false,
-    List<Widget> traling}) {
+    List<Widget> traling,
+    GlobalKey<ScaffoldState> scaffoldKey}) {
   return PreferredSize(
     preferredSize: Size(double.infinity, 120),
     child: Row(
@@ -19,6 +20,14 @@ PreferredSizeWidget myAppBar(BuildContext context,
               SizedBox(height: 60),
               Row(
                 children: <Widget>[
+                  scaffoldKey != null
+                      ? IconButton(
+                          icon: Icon(Icons.double_arrow_rounded),
+                          onPressed: () {
+                            scaffoldKey.currentState.openDrawer();
+                          },
+                        )
+                      : Container(),
                   disableBack
                       ? Icon(
                           Icons.arrow_back_ios,
