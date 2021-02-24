@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:email_validator/email_validator.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:inoveMilk/bloc/lancar_coleta.dart';
+import 'package:inoveMilk/modelos/produtor.dart';
 import 'package:inoveMilk/widget/custom_button.dart';
 import 'package:inoveMilk/widget/my_app_bar.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 
 class LancarColeta extends StatefulWidget {
+  LancarColeta({this.produtor});
+  final Produtor produtor;
+
   @override
   _LancarColetaState createState() => _LancarColetaState();
 }
 
 class _LancarColetaState extends State<LancarColeta> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _quantidadeController = new TextEditingController();
-  TextEditingController _temperaturaController = new TextEditingController();
-  TextEditingController _amostraController = new TextEditingController();
+  TextEditingController _quantidadeController =
+      new MaskedTextController(mask: '00000,00');
+  TextEditingController _temperaturaController =
+      new MaskedTextController(mask: '00,00');
   TextEditingController _observacaoController = new TextEditingController();
   FocusNode _quantidadeNode = FocusNode();
   FocusNode _temperaturaNode = FocusNode();
-  FocusNode _amostraNode = FocusNode();
   FocusNode _observacaoNode = FocusNode();
   bool _amostra = false;
 
@@ -40,7 +44,7 @@ class _LancarColetaState extends State<LancarColeta> {
       child: Scaffold(
         appBar: myAppBar(
           context,
-          title: "Lançar coleta #clientenome",
+          title: "Lançar coleta " + widget.produtor.nome,
         ),
         body: SingleChildScrollView(
           child: Form(
@@ -58,7 +62,10 @@ class _LancarColetaState extends State<LancarColeta> {
                       controller: _quantidadeController,
                       style: TextStyle(color: Colors.black),
                       decoration: new InputDecoration(labelText: "Quantidade"),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                        signed: false,
+                      ),
                       focusNode: _quantidadeNode,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (e) {
@@ -76,7 +83,10 @@ class _LancarColetaState extends State<LancarColeta> {
                       },
                       controller: _temperaturaController,
                       decoration: InputDecoration(labelText: "Temperatura"),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                        signed: false,
+                      ),
                     ),
                   ),
                   Container(
@@ -105,7 +115,7 @@ class _LancarColetaState extends State<LancarColeta> {
                     color: Colors.black,
                     textColor: Colors.white,
                     onPress: () {
-                      _salvar();
+                      _salvar(context);
                     },
                   )
                 ],
@@ -117,5 +127,13 @@ class _LancarColetaState extends State<LancarColeta> {
     );
   }
 
-  _salvar() {}
+  _salvar(context) {
+    _bloc.salvarColeta(
+        context,
+        _quantidadeController.text,
+        _temperaturaController.text,
+        _observacaoController.text,
+        _amostra,
+        widget.produtor);
+  }
 }

@@ -14,7 +14,6 @@ class _LoginState extends State<Login> {
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
 
-  bool _autoValidate = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,7 +31,6 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                 child: TextFormField(
-                  autovalidate: _autoValidate,
                   controller: _emailController,
                   decoration: InputDecoration(labelText: "Email"),
                   keyboardType: TextInputType.emailAddress,
@@ -40,7 +38,6 @@ class _LoginState extends State<Login> {
               ),
               Container(
                 child: TextFormField(
-                  autovalidate: _autoValidate,
                   controller: _passwordController,
                   decoration: InputDecoration(labelText: "Senha"),
                   keyboardType: TextInputType.visiblePassword,
@@ -53,11 +50,7 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     _login();
 
-                    {
-                      setState(() {
-                        _autoValidate = true;
-                      });
-                    }
+                    {}
                   },
                 ),
               ),
@@ -66,10 +59,6 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  String _validator(value) {
-    return value.length < 15 ? "Número inválido" : null;
   }
 
   void _login() {

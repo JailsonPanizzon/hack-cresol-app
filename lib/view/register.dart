@@ -12,12 +12,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  // MaskTextInputFormatter _numberMaskFormatter = new MaskTextInputFormatter(
-  //     mask: '(##) # ####-####', filter: {"#": RegExp(r'[0-9]')});
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
 
-  bool _autoValidate = false;
   @override
   Widget build(BuildContext context) {
     print(widget.email);
@@ -37,7 +34,6 @@ class _RegisterState extends State<Register> {
             children: [
               Container(
                 child: TextFormField(
-                  autovalidate: _autoValidate,
                   // initialValue: widget.email != null ? widget.email : "",
                   controller: _emailController,
                   decoration: InputDecoration(labelText: "Email"),
@@ -46,7 +42,6 @@ class _RegisterState extends State<Register> {
               ),
               Container(
                 child: TextFormField(
-                  autovalidate: _autoValidate,
                   controller: _passwordController,
                   decoration: InputDecoration(labelText: "Senha"),
                   keyboardType: TextInputType.visiblePassword,
@@ -58,12 +53,6 @@ class _RegisterState extends State<Register> {
                   child: Text("Register"),
                   onPressed: () {
                     _legister();
-
-                    {
-                      setState(() {
-                        _autoValidate = true;
-                      });
-                    }
                   },
                 ),
               ),
@@ -72,10 +61,6 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
-  }
-
-  String _validator(value) {
-    return value.length < 15 ? "Número inválido" : null;
   }
 
   void _legister() {

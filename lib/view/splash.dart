@@ -1,5 +1,4 @@
 import 'package:inoveMilk/bloc/login.dart';
-import 'package:inoveMilk/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';

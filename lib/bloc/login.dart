@@ -1,3 +1,4 @@
+import 'package:inoveMilk/modelos/motorista.dart';
 import 'package:inoveMilk/view/home.dart';
 import 'package:inoveMilk/view/login.dart';
 import 'package:inoveMilk/view/register.dart';
@@ -5,6 +6,7 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import 'package:rypr/view/home.dart';
 // import 'package:rypr/view/validarcodigo.dart';
@@ -15,13 +17,29 @@ class LoginBloc implements BlocBase {
     _initBloc();
   }
   FirebaseAuth firebaseAuth;
-  String _actualCode;
-  AuthCredential _authCredential;
   FirebaseUser user;
+  String empresa;
   BuildContext _localcontext;
   void _initBloc() async {
     firebaseAuth = FirebaseAuth.instance;
     user = await firebaseAuth.currentUser();
+    empresa = null;
+  }
+
+  Future<List<Motorista>> getMotorista() async {
+    user = await firebaseAuth.currentUser();
+    QuerySnapshot motoristasQuery = await Firestore.instance
+        .collection('motorista')
+        .where("IdUsuario", isEqualTo: user.uid)
+        .getDocuments();
+    List<Motorista> motoristas = motoristasQuery.documents
+        .map((doc) => Motorista(
+            idUsuario: doc.data['IdUsuario'], empresa: doc.data['empresa']))
+        .toList();
+    print(motoristas.map((f) {
+      return f.idUsuario;
+    }));
+    return motoristas;
   }
 
   getStatusAutentication(BuildContext context) async {
@@ -29,11 +47,32 @@ class LoginBloc implements BlocBase {
     user = await firebaseAuth.currentUser();
     if (user != null && user.getIdToken() != null) {
       if (user.isEmailVerified) {
-        Navigator.pushAndRemoveUntil(
-            _localcontext, MaterialPageRoute(builder: (context) => Home()),
-            (e) {
-          return false;
-        });
+        List<Motorista> motoristas = await getMotorista();
+        if (motoristas.length < 1) {
+          SweetAlert.show(context,
+              title: "Acesso não altorizado",
+              subtitle: "Somente motoristas tem acesso ao aplicativo de coleta",
+              style: SweetAlertStyle.confirm,
+              confirmButtonText: "OK",
+              showCancelButton: true, onPress: (bool isConfirm) {
+            if (isConfirm) {
+              empresa = motoristas[0].empresa;
+              Navigator.pushAndRemoveUntil(
+                  context, MaterialPageRoute(builder: (context) => Login()),
+                  (e) {
+                return false;
+              });
+              return false;
+            }
+            return true;
+          });
+        } else {
+          Navigator.pushAndRemoveUntil(
+              _localcontext, MaterialPageRoute(builder: (context) => Home()),
+              (e) {
+            return false;
+          });
+        }
       } else {
         SweetAlert.show(context,
             title: "Confirme seu email",
@@ -62,7 +101,7 @@ class LoginBloc implements BlocBase {
   tryLogin(TextEditingController emailController,
       TextEditingController passwordController, BuildContext context) async {
     try {
-      AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       getStatusAutentication(context);
     } catch (e) {

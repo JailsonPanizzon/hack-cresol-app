@@ -4,14 +4,14 @@ class Usuario {
       this.endereco,
       this.email,
       this.telefone,
-      this.idOwner,
+      this.idEmpresa,
       this.idDoc});
 
   String nome;
   String email;
   String endereco;
   String telefone;
-  String idOwner;
+  String idEmpresa;
   String idDoc;
 
   factory Usuario.fromMap(map) => Usuario(
@@ -19,14 +19,14 @@ class Usuario {
       nome: map["nome"],
       email: map["email"],
       telefone: map["telefone"],
-      idOwner: map["idEmpresa"]);
+      idEmpresa: map["idEmpresa"]);
 
   Map<String, dynamic> toJson() {
     return {
       "nome": this.nome,
       "email": this.email,
       "telefone": this.telefone,
-      "idOwner": this.idOwner,
+      "idEmpresa": this.idEmpresa,
       "endereco": this.endereco,
     };
   }

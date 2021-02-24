@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:inoveMilk/bloc/buscar_produtor.dart';
+import 'package:inoveMilk/modelos/produtor.dart';
+import 'package:inoveMilk/view/lancar_coleta.dart';
 import 'package:inoveMilk/widget/custom_button.dart';
 import 'package:inoveMilk/widget/my_app_bar.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BuscarProdutor extends StatefulWidget {
   @override
@@ -12,16 +16,10 @@ class BuscarProdutor extends StatefulWidget {
 
 class _BuscarProdutorState extends State<BuscarProdutor> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _quantidadeController = new TextEditingController();
-  TextEditingController _temperaturaController = new TextEditingController();
-  TextEditingController _amostraController = new TextEditingController();
-  TextEditingController _observacaoController = new TextEditingController();
-  FocusNode _quantidadeNode = FocusNode();
-  FocusNode _temperaturaNode = FocusNode();
-  FocusNode _amostraNode = FocusNode();
-  FocusNode _observacaoNode = FocusNode();
-  bool _amostra = false;
+  GlobalKey<AutoCompleteTextFieldState<Produtor>> key = new GlobalKey();
 
+  TextEditingController _buscaController = new TextEditingController();
+  Produtor _produtor;
   BuscarProdutorBloc _bloc = BlocProvider.getBloc<BuscarProdutorBloc>();
 
   @override
@@ -39,7 +37,7 @@ class _BuscarProdutorState extends State<BuscarProdutor> {
       child: Scaffold(
         appBar: myAppBar(
           context,
-          title: "Lançar coleta #clientenome",
+          title: "Buscar produtor",
         ),
         body: SingleChildScrollView(
           child: Form(
@@ -50,27 +48,25 @@ class _BuscarProdutorState extends State<BuscarProdutor> {
                 children: <Widget>[
                   Container(
                     height: _heightField,
-                    child: TextFormField(
-                      validator: (value) {
-                        return value.isEmpty ? "Preencha este campo" : null;
-                      },
-                      controller: _quantidadeController,
-                      style: TextStyle(color: Colors.black),
-                      decoration: new InputDecoration(labelText: "Busca"),
-                      keyboardType: TextInputType.number,
-                      focusNode: _quantidadeNode,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (e) {
-                        FocusScope.of(context).requestFocus(_temperaturaNode);
+                    child: FutureBuilder<QuerySnapshot>(
+                      future: _bloc.getProdutores(context),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        else
+                          return _buildList(
+                              _bloc.mapToList(snapshot.data.documents));
                       },
                     ),
                   ),
                   CustomButtom(
-                    text: "Salvar",
+                    text: "Selecionar",
                     color: Colors.black,
                     textColor: Colors.white,
                     onPress: () {
-                      _salvar();
+                      selecionar(_produtor);
                     },
                   )
                 ],
@@ -82,5 +78,36 @@ class _BuscarProdutorState extends State<BuscarProdutor> {
     );
   }
 
-  _salvar() {}
+  selecionar(produtor) {
+    if (_produtor != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LancarColeta(
+            produtor: produtor,
+          ),
+        ),
+      );
+    }
+  }
+
+  _buildList(List<Produtor> snapshot) {
+    return AutoCompleteTextField<Produtor>(
+      key: key,
+      decoration: InputDecoration(hintText: "Digite o nome do produtor"),
+      controller: _buscaController,
+      itemSubmitted: (item) {
+        _produtor = item;
+      },
+      suggestions: snapshot,
+      itemBuilder: (context, suggestion) => new Padding(
+          child: new ListTile(
+            title: new Text(suggestion.nome),
+          ),
+          padding: EdgeInsets.all(8.0)),
+      clearOnSubmit: false,
+      itemFilter: (suggestion, input) =>
+          suggestion.nome.toLowerCase().startsWith(input.toLowerCase()),
+    );
+  }
 }

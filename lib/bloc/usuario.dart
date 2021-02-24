@@ -1,9 +1,5 @@
-import 'dart:async';
-
 import 'package:inoveMilk/modelos/usuario.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsuariosBloc implements BlocBase {
@@ -11,8 +7,6 @@ class UsuariosBloc implements BlocBase {
     _initBloc();
   }
   void _initBloc() async {}
-
-  Stream<QuerySnapshot> getUsuarios(BuildContext context) {}
 
   convert(List<DocumentSnapshot> doc) {
     return mapToList(doc);
