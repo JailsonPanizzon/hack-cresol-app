@@ -20,6 +20,7 @@ class _BuscarProdutorState extends State<BuscarProdutor> {
 
   TextEditingController _buscaController = new TextEditingController();
   Produtor _produtor;
+  String _produtor_name;
   BuscarProdutorBloc _bloc = BlocProvider.getBloc<BuscarProdutorBloc>();
 
   @override
@@ -98,6 +99,8 @@ class _BuscarProdutorState extends State<BuscarProdutor> {
       controller: _buscaController,
       itemSubmitted: (item) {
         _produtor = item;
+        _produtor_name = item.nome;
+        _buscaController.text = item.nome;
       },
       suggestions: snapshot,
       itemBuilder: (context, suggestion) => new Padding(

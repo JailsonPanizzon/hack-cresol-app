@@ -5,11 +5,11 @@ class Motorista {
   String empresa;
 
   factory Motorista.fromMap(map) => Motorista(
-        idUsuario: map["idUsuario"],
+        idUsuario: map["IdUsuario"],
         empresa: map["empresa"],
       );
 
   Map<String, dynamic> toJson() {
-    return {"idUsuario": this.idUsuario, "empresa": this.empresa};
+    return {"IdUsuario": this.idUsuario, "empresa": this.empresa};
   }
 }

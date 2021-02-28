@@ -20,8 +20,16 @@ class _MySplashScreenState extends State<MySplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.red,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(253, 135, 12, 1),
+              image: DecorationImage(
+                  image: AssetImage("images/1.png"), fit: BoxFit.fitWidth),
+            ),
+          ),
+        ],
       ),
     );
   }

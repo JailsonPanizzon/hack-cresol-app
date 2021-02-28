@@ -1,35 +1,26 @@
 class Produtor {
-  Produtor(
-      {this.nome,
-      this.endereco,
-      this.hora,
-      this.coordenadas,
-      this.quantidade,
-      this.observacao,
-      this.amostra,
-      this.empresaAtual,
-      this.temperatura});
+  Produtor({
+    this.nome,
+    this.endereco,
+    this.hora,
+    this.coordenadas,
+    this.idProdutor,
+  });
 
   String nome;
   String hora;
   String endereco;
   String coordenadas;
   String observacao;
-  String amostra;
-  String empresaAtual;
-  String quantidade;
-  String temperatura;
+  String idProdutor;
 
   factory Produtor.fromMap(map) => Produtor(
-      endereco: map["endereco"],
-      nome: map["nome"],
-      hora: map["hora"],
-      coordenadas: map["coordenadas"],
-      amostra: map["amostra"],
-      empresaAtual: map["empresaAtual"],
-      observacao: map["observacao"],
-      temperatura: map["temperatura"],
-      quantidade: map["idEmpresa"]);
+        endereco: map["endereco"],
+        nome: map["nome"],
+        hora: map["hora"],
+        coordenadas: map["coordenadas"],
+        idProdutor: map["idProdutor"],
+      );
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,10 +28,7 @@ class Produtor {
       "hora": this.hora,
       "coordenadas": this.coordenadas,
       "observacao": this.observacao,
-      "amostra": this.amostra,
-      "empresaAtual": this.empresaAtual,
-      "quantidade": this.quantidade,
-      "temperatura": this.temperatura,
+      "idProdutor": this.idProdutor,
       "endereco": this.endereco,
     };
   }

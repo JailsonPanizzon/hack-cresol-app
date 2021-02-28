@@ -22,7 +22,10 @@ PreferredSizeWidget myAppBar(BuildContext context,
                 children: <Widget>[
                   scaffoldKey != null
                       ? IconButton(
-                          icon: Icon(Icons.double_arrow_rounded),
+                          icon: Icon(
+                            Icons.menu,
+                            size: 30,
+                          ),
                           onPressed: () {
                             scaffoldKey.currentState.openDrawer();
                           },
@@ -41,6 +44,7 @@ PreferredSizeWidget myAppBar(BuildContext context,
                         ),
                   Text(
                     title != null ? title : "",
+                    style: TextStyle(fontSize: 24),
                   ),
                 ],
               ),

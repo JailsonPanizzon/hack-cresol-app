@@ -1,58 +1,95 @@
+import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inoveMilk/bloc/login.dart';
+import 'package:inoveMilk/modelos/carga.dart';
 import 'package:inoveMilk/modelos/coleta.dart';
 import 'package:inoveMilk/modelos/motorista.dart';
 import 'package:inoveMilk/view/home.dart';
 import 'package:inoveMilk/widget/custom_alert.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:sweetalert/sweetalert.dart';
+import 'package:geolocator/geolocator.dart';
 
-class LancarColetaBloc implements BlocBase {
-  LancarColetaBloc() {
+class HomeBloc implements BlocBase {
+  HomeBloc() {
     _initBloc();
   }
   BuildContext _localcontext;
 
+  List<Coleta> _coletasList;
+
+  StreamController<List<Coleta>> _coletas =
+      new StreamController<List<Coleta>>();
+  Stream<QuerySnapshot> value;
+  Stream get listaColetass => _coletas.stream;
   void _initBloc() async {}
 
-  salvarColeta(BuildContext context, quantidade, temperatura, observacao,
-      amostra, produtor) async {
+  int filtro = 0;
+  convert(List<DocumentSnapshot> doc) {
+    return mapToList(doc);
+  }
+
+//Convert map to cliente list
+  List mapToList(List<DocumentSnapshot> docList) {
+    List<Coleta> coletaList = [];
+    docList.forEach((document) {
+      Map<String, dynamic> coleta = document.data;
+      if (coleta != null) {
+        Coleta newColeta = Coleta.fromMap(coleta);
+        print(newColeta.carga == "-1");
+
+        if (newColeta.carga == "-1") {
+          newColeta.id = document.reference.documentID;
+          coletaList.add(newColeta);
+        }
+      }
+    });
+    _coletasList = coletaList;
+    return coletaList;
+  }
+
+  Future<QuerySnapshot> getColetas(BuildContext context) async {
+    List<Motorista> motorista =
+        await BlocProvider.getBloc<LoginBloc>().getMotorista();
+    print(motorista[0].idUsuario);
+    return Firestore.instance
+        .collection('coleta')
+        .where("motorista", isEqualTo: motorista[0].idUsuario)
+        .getDocuments();
+  }
+
+  checkin(BuildContext context) async {
     SweetAlert.show(
       context,
       title: "Salvando",
       style: SweetAlertStyle.loading,
     );
     DateTime now = new DateTime.now();
-    List<Motorista> motorista =
-        await BlocProvider.getBloc<LoginBloc>().getMotorista();
     DateTime hora = new DateTime(now.hour, now.minute);
     DateTime data = new DateTime(now.year, now.month, now.day);
     Position coordenada = await _determinePosition();
-    print(produtor.nome);
-    print(produtor.idProdutor);
-    Coleta coleta = new Coleta(
-        amostra: amostra,
-        quantidade: quantidade,
-        produtor: produtor.idProdutor,
-        nomeProdutor: produtor.nome,
-        temperatura: temperatura,
-        observacao: observacao,
+
+    Carga carga = new Carga(
         data: data.toString(),
         hora: hora.toString(),
-        carga: "-1",
         coordenadas: coordenada.toString(),
-        motorista: motorista[0].idUsuario);
+        lote: "-1");
+    print(carga);
+    Firestore.instance.collection('carga').add(carga.toJson()).then((value) {
+      _coletasList.forEach((coleta) {
+        coleta.carga = value.documentID;
+        print(coleta.carga);
+        Firestore.instance
+            .collection("coleta")
+            .document(coleta.id)
+            .setData(coleta.toJson());
+      });
+      _coletasList = [];
 
-    Firestore.instance
-        .collection('coleta')
-        .document()
-        .setData(coleta.toJson())
-        .then((value) {
       SweetAlert.show(context,
-          title: "salvo com sucesso",
+          title: "Check-in realizado com sucesso",
           style: SweetAlertStyle.success,
           confirmButtonText: "OK",
           showCancelButton: false, onPress: (bool isConfirm) {
@@ -69,7 +106,7 @@ class LancarColetaBloc implements BlocBase {
       Navigator.pop(context);
       customAlert(_localcontext,
           title: "Erro",
-          subtitle: "Erro ao salvar coleta",
+          subtitle: "Erro ao realizar check-in",
           style: "error", onPress: (bool isConfirm) {
         Navigator.pop(context);
       });
@@ -108,17 +145,20 @@ class LancarColetaBloc implements BlocBase {
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    _coletas.close();
+  }
 
   @override
   void addListener(listener) {}
-
-  @override
-  bool get hasListeners => null;
 
   @override
   void notifyListeners() {}
 
   @override
   void removeListener(listener) {}
+
+  @override
+  // TODO: implement hasListeners
+  bool get hasListeners => throw UnimplementedError();
 }

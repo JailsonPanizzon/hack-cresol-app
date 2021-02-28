@@ -50,7 +50,7 @@ class LoginBloc implements BlocBase {
         List<Motorista> motoristas = await getMotorista();
         if (motoristas.length < 1) {
           SweetAlert.show(context,
-              title: "Acesso não altorizado",
+              title: "Acesso não autorizado",
               subtitle: "Somente motoristas tem acesso ao aplicativo de coleta",
               style: SweetAlertStyle.confirm,
               confirmButtonText: "OK",

@@ -1,4 +1,5 @@
 import 'package:inoveMilk/bloc/buscar_produtor.dart';
+import 'package:inoveMilk/bloc/home.dart';
 import 'package:inoveMilk/bloc/lancar_coleta.dart';
 import 'package:inoveMilk/bloc/login.dart';
 import 'package:inoveMilk/bloc/usuario.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => UsuariosBloc()),
         Bloc((i) => LancarColetaBloc()),
         Bloc((i) => BuscarProdutorBloc()),
+        Bloc((i) => HomeBloc()),
       ],
       child: MaterialApp(
         title: 'inoveMilk',
